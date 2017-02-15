@@ -11,13 +11,8 @@
     "sqlite3": "*",
     "sequelize": "*"
 	},
-	"repository": {
-		"type": "Gomix",
-		"url": "https://hyperdev.com/#!/project/abstracted-hole"
-	},
 	"keywords": [
 		"node",
-		"gomix",
 		"express",
 		"sqlite3"
 	],
