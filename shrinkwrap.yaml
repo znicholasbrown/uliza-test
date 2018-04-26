@@ -440,6 +440,7 @@ packages:
     dependencies:
       nan: 2.9.2
     dev: false
+    requiresBuild: true
     resolution:
       integrity: sha512-6OlcAQNGaRSBLK1CuaRbKwlMFBb9DEhzmZyQP+fltNRF6XcIMpVIfXCBEcXPe1d4v9LnhkQUYkknDbA5JReqJg==
   /statuses/1.4.0:
@@ -516,7 +517,7 @@ packages:
     resolution:
       integrity: sha512-eVVHka2jRaAp9QanKhLpxWs3AGDV0b8cijlavxBnn4ryXzq5N/3Xe3nkQsI0XMRA16RURwviCWuOCj4mXCmrxw==
 registry: 'https://registry.npmjs.org/'
-shrinkwrapMinorVersion: 4
+shrinkwrapMinorVersion: 5
 shrinkwrapVersion: 3
 specifiers:
   express: ^4.12.4
