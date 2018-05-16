@@ -517,7 +517,7 @@ packages:
     resolution:
       integrity: sha512-eVVHka2jRaAp9QanKhLpxWs3AGDV0b8cijlavxBnn4ryXzq5N/3Xe3nkQsI0XMRA16RURwviCWuOCj4mXCmrxw==
 registry: 'https://registry.npmjs.org/'
-shrinkwrapMinorVersion: 5
+shrinkwrapMinorVersion: 6
 shrinkwrapVersion: 3
 specifiers:
   express: ^4.12.4
