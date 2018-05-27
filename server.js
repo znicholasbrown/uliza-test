@@ -119,7 +119,7 @@ app.get("/answer", function (request, response) {
   var qAnswer;
   Answer.findAll({
     where: {
-      question_id: request.question_id
+      question_id: request.query.question_id
     }
   }).then(function (answer) {
     qAnswer = answer;

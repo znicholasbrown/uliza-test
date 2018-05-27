@@ -10,8 +10,11 @@ $(function() {
   });
   
   function handleClick (e) {
-    $.get('/answer?q=' + e.target.parentNode.id, function () {
-      $('div#' + e.target.parentNode.id).append(
+    var question_id = e.target.parentNode.id;
+    console.log(question_id);
+    $.get('/answer?' + $.param({question_id: question_id}), function (response) {
+      console.log(response);
+      $('<div></div>').text(response).appendTo('div#' + e.target.parentNode.id)
     })
   }
   $('form').submit(function(event) {
