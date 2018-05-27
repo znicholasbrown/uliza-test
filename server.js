@@ -1,18 +1,18 @@
 // init project
-const express = require('express');
-const Sequelize = require('sequelize');
+var express = require('express');
+var Sequelize = require('sequelize');
 const app = express();
 
 // default questions list
-const questions = [
+var questions = [
       ["How could you survive in the wilderness for a month?", "E123ABC", "Q1"],
       ["Is there such a thing as universal time?", "E456ABC", "Q2"],
       ["How do I get to Aba from Lagos?", "E123ABC", "Q3"],
       ["How many people can a moon made of cheese feed?", "E456ABC", "Q4"]
     ];
 
-const answers = [
-      ["I couldn't.", "Q1", "U123ABC"],
+var answers = [
+      ["I couldn\'t.", "Q1", "U123ABC"],
       ["Yes, but we'll never use it.", "Q2", "U456ABC"],
       ["Make 3 lefts, a bizarre series of rights, and then go straight for 6 light years.", "Q3", "U123ABC"]
     ];
@@ -22,7 +22,7 @@ var Answer;
 
 // setup a new database
 // using database credentials set in .env
-const sequelize = new Sequelize('database', process.env.DB_USER, process.env.DB_PASS, {
+var sequelize = new Sequelize('database', process.env.DB_USER, process.env.DB_PASS, {
   host: '0.0.0.0',
   dialect: 'sqlite',
   pool: {
@@ -73,18 +73,18 @@ sequelize.authenticate()
 
 // populate table with default questions and answers
 function setup(){
-  Question.sync({force: true}) // We use 'force: true' in this example to drop the table users if it already exists, and create a new one. You'll most likely want to remove this setting in your own apps
+  Question.sync({force: false}) // We use 'force: true' in this example to drop the table questions if it already exists, and create a new one. You'll most likely want to remove this setting in your own apps
     .then(function(){
       // Add the default questions to the database
-      for(var i=0; i<questions.length; i++){ // loop through all users
-        Question.create({ question_text: questions[i][0], enquirer_id: questions[i][1], question_id: questions[i][2]}); // create a new entry in the users table
+      for(var i=0; i<questions.length; i++){ // loop through all questions
+        Question.create({ question_text: questions[i][0], enquirer_id: questions[i][1], question_id: questions[i][2]}); // create a new entry in the questions table
       }
     });  
-  Answer.sync({force: true})
+  Answer.sync({force: false})
     .then(function(){
       // Add the default answers to the database
-      for(var i=0; i<answers.length; i++){ // loop through all users
-        Answer.create({ answer_text: answers[i][0], question_id: answers[i][1], uliza_expert_id: answers[i][2]}); // create a new entry in the users table
+      for(var i=0; i<answers.length; i++){ // loop through all answers
+        Answer.create({ answer_text: answers[i][0], question_id: answers[i][1], uliza_expert_id: answers[i][2]}); // create a new entry in the answers table
       }
     });  
 }
@@ -93,16 +93,13 @@ function setup(){
 app.use(express.static('public'));
 
 // http://expressjs.com/en/starter/basic-routing.html
-app.get("/", function (request, response) {
-  response.sendFile(__dirname + '/views/index.html');
-});
+
 
 app.get("/questions", function (request, response) {
-  response.sendStatus(200);)
   var dbQuestions=[];
   Question.findAll().then(function(questions) { // find all entries in the questions tables
     questions.forEach(function(question) {
-      dbQuestions.push([question.question_text, question.enquirer_id, question.question_id]); // adds their info to the dbUsers value
+      dbQuestions.push([question.question_text, question.enquirer_id, question.question_id]); // adds their info to the dbQuestions value
     });
     response.send(dbQuestions); // sends dbQuestions back to the page
   });
@@ -125,15 +122,11 @@ app.get("/answer", function (request, response) {
     qAnswer = answer;
     response.send(qAnswer);
   });
-})
-  
-
-// drops the table users if it already exists, populates new users table it with just the default users.
-app.get("/reset", function (request, response) {
-  setup();
-  response.redirect("/");
 });
 
+app.get("/", function (request, response) {
+  response.sendFile(__dirname + '/views/notIndex.html');
+});
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
