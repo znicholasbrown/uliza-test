@@ -22,11 +22,17 @@ $(function() {
   $('form').submit(function(event) {
     event.preventDefault();
     var questionAsked = $('input#askQuestion').val();
-    $.post('/answer?' + $.param({question_text:questionAsked, enquirer_id: enquirer_id}), function(response) {
+    $.post('/answer?' + $.param({answer_text:questionAsked, uliza_expert_id: uliza_expert_id}), function(response) {
       console.log(response);
-      $('<div></div>').text(response.question_text).attr('id', response.question_id).append($('<button>View Answer</button>').click(viewAnswer)).appendTo('div#questions');
+        $.get('/unanswered', function(questions) {
+          questions.forEach(function(question) {
+            $('<div></div>').text(question[0]).attr('id', question[2]).append($('<button>Answer</button>').click(answer)).appendTo('div#questions');
+          });
+        });
       $('input#questionAnswered').val('');
       $('input').focus();
+      $('.answer').attr('id', '');
+      $('.answer').hide();
     });
   });
 });

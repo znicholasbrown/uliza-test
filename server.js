@@ -143,12 +143,22 @@ app.post("/questions", function (request, response) {
 
 app.post("/answer", function (request, response) {
   let randomID = 'A' + uniqid();
-  Answer.create({ question_text: request.query.question_text, enquirer_id: request.query.enquirer_id, question_id: randomID, answered: false });
-  Answer.create({ answer_text: request.query.answer_text, question_id: request.query.question_id, uliza_expert_id: request.query.uliza_expert_id, answer_id: answers[i][3] });
-  response.send({ question_text: request.query.question_text, enquirer_id: request.query.enquirer_id, question_id: randomID, answered: false });
-  
-      // relevant: uliza_expert_id, enquirer_id, question_id,
-    // question_text, answer_id, answer_text
+
+  Question.find({
+    where: {
+      question_id: request.query.question_id
+    }
+  }).then(function (record) {
+    if (record) {
+      console.log(record);
+      record.updateAttributes({
+        answered: true
+      })
+      Answer.create({ answer_text: request.query.answer_text, question_id: request.query.question_id, uliza_expert_id: request.query.uliza_expert_id, answer_id: randomID });
+      response.sendStatus(200)
+    }
+  })
+
 });
 
 app.get("/answer", function (request, response) {
