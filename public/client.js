@@ -2,20 +2,18 @@
 // run by the browser each time your view template is loaded
 
 $(function() {
-  $.get('/users', function(users) {
-    users.forEach(function(user) {
-      $('<li></li>').text(user[0] + " " + user[1]).appendTo('ul#users');
+  $.get('/questions', function(questions) {
+    questions.forEach(function(question) {
+      $('<li></li>').text(question[0] + " " + question[1]).appendTo('ul#users');
     });
   });
 
   $('form').submit(function(event) {
     event.preventDefault();
-    var fName = $('input#fName').val();
-    var lName = $('input#lName').val();
-    $.post('/users?' + $.param({fName:fName, lName:lName}), function() {
-      $('<li></li>').text(fName + " " + lName).appendTo('ul#users');
-      $('input#fName').val('');
-      $('input#lName').val('');
+    var questionAsked = $('input#askQuestion').val();
+    $.post('/questions?' + $.param({question:questionAsked}), function() {
+      $('<li></li>').text(questionAsked).appendTo('ul#questions');
+      $('input#questionAsked').val('');
       $('input').focus();
     });
   });

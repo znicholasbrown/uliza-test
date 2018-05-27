@@ -7,12 +7,12 @@ var Sequelize = require('sequelize');
 var app = express();
 
 // default user list
-var users = [
-      ["John","Hancock"],
-      ["Liz","Smith"],
-      ["Ahmed","Khan"]
+var questions = [
+      ["How could you survive in the wilderness for a month?"],
+      ["Is there such a thing as universal time?"],
+      ["How do I get to Aba from Lagos?"]
     ];
-var User;
+var Question;
 
 // setup a new database
 // using database credentials set in .env
@@ -34,15 +34,16 @@ sequelize.authenticate()
   .then(function(err) {
     console.log('Connection has been established successfully.');
     // define a new table 'users'
-    User = sequelize.define('users', {
-      firstName: {
+    Question = sequelize.define('questions', {
+      question_text: {
         type: Sequelize.STRING
       },
-      lastName: {
+      enquirer_id: {
         type: Sequelize.STRING
       }
     });
-    
+    // relevant: uliza_expert_id, enquirer_id, question_id,
+// question_text, answer_id, answer_text
     setup();
   })
   .catch(function (err) {

@@ -4,8 +4,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Sequelize SQLite3 Example</title>
-    <meta name="description" content="Sequelize SQLite3 Example">
+    <title>Uliza SQLite3 Example</title>
+    <meta name="description" content="">
     <link id="favicon" rel="icon" href="https://glitch.com/favicon-app.ico" type="image/x-icon">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,26 +15,22 @@
   <body>
     <header>
       <h1>
-        A list of users
+        Questions
       </h1>
     </header>
 
     <main>
-      <p>Add a new user:</p>
+      <p>Ask a new question:</p>
       <form>
-        <input id="fName" type="text" maxlength="100" placeholder="John"> <input id="lName" type="text" maxlength="100" placeholder="Hancock">
+        <input id="askQuestion" type="text" maxlength="100" placeholder="Ask here...">
         <button type="submit">Submit</button>
       </form>
-      <p>Users:</p>
-      <section class="users">
-        <ul id="users">
+      <p>Current questions:</p>
+      <section class="questions">
+        <ul id="questions">
         </ul>
       </section>
-      <p><a href="/reset">Reset</a> | <a href="/clear">Clear</a></p>
     </main>
-
-    <script src="https://button.glitch.me/button.js" data-style="glitch"></script>
-    <div class="glitchButton" style="position:fixed;top:20px;right:20px;"></div>
 
     <!-- Your web-app is https, so your scripts need to be too -->
     <script src="https://code.jquery.com/jquery-2.2.1.min.js"
