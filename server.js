@@ -111,8 +111,9 @@ app.get("/questions", function (request, response) {
 
 // creates a new entry in the questions table
 app.post("/questions", function (request, response) {
+  let randomID = '';
   Question.create({ question_text: request.query.question_text, enquirer_id: request.query.enquirer_id, question_id: request.query.enquirer_id });
-  response.sendStatus(200);
+  response.send({ question_text: request.query.question_text, enquirer_id: request.query.enquirer_id, question_id: request.query.enquirer_id });
 });
 
 app.get("/answer", function (request, response) {

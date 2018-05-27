@@ -2,6 +2,10 @@
 // run by the browser each time your view template is loaded
 
 $(function() {
+  // These would be provided by the server.
+  const enquirer_id = 'E123ABC'; 
+  const uliza_exper_id = 'U123ABC';
+  
   $.get('/questions', function(questions) {
     console.log(questions);
     questions.forEach(function(question) {
@@ -11,17 +15,20 @@ $(function() {
   
   function handleClick (e) {
     var question_id = e.target.parentNode.id;
-    console.log(question_id);
     $.get('/answer?' + $.param({question_id: question_id}), function (response) {
-      console.log(response);
-      $('<div></div>').text(response).appendTo('div#' + e.target.parentNode.id)
+      if (response.length > 0) {
+        $('<div></div>').text(response[0].answer_text).appendTo('div#' + e.target.parentNode.id)
+      } else {
+        $('<div></div>').text('No answer yet.').appendTo('div#' + e.target.parentNode.id)
+      }
+      
     })
   }
   $('form').submit(function(event) {
     event.preventDefault();
     var questionAsked = $('input#askQuestion').val();
-    $.post('/questions?' + $.param({question:questionAsked}), function() {
-      $('<li></li>').text(questionAsked).appendTo('ul#questions');
+    $.post('/questions?' + $.param({question_text:questionAsked, enquirer_id: enquirer_id}), function(response) {
+      $('<div></div>').text(response[0].question_text).attr('id', response[0].question_id).append($('<button>View Answer</button>').click(handleClick)).appendTo('div#questions');
       $('input#questionAsked').val('');
       $('input').focus();
     });
