@@ -9,7 +9,15 @@ var questions = [
       ["How could you survive in the wilderness for a month?", "E123ABC", "Q1", true],
       ["Is there such a thing as universal time?", "E456ABC", "Q2", true],
       ["How do I get to Aba from Lagos?", "E123ABC", "Q3", true],
-      ["How many people can a moon made of cheese feed?", "E456ABC", "Q4", false]
+      ["How many people can a moon made of cheese feed?", "E456ABC", "Q4", false],
+      ["Why do my feet look like a troll\'s feet?", "E457ABC", "Q5", false],
+      ["Who killed JFK?", "E456ABC", "Q4", false],
+      ["Does Darth Vader have asthma?", "E458ABC", "Q6", false],
+      ["I saw 10 movies in one week once", "E459ABC", "Q7", false],
+      ["Is yogurt gurt from a yo or yo from a gurt?", "E460ABC", "Q8", false],
+      ["How much wood could a wood-chuck chuck if a wood-chuck could chuck wood?", "E460ABC", "Q9", false],
+      ["Does middle-aged George Clooney make young George Clooney look like a dumpster full of garbage?", "E456ABC", "Q10", false],
+      ["Why is nature so scary?", "E456ABC", "Q11", false]
     ];
 
 var answers = [

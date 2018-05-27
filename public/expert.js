@@ -22,7 +22,7 @@ $(function() {
   $('form').submit(function(event) {
     event.preventDefault();
     var questionAsked = $('input#askQuestion').val();
-    $.post('/answer?' + $.param({answer_text:questionAsked, uliza_expert_id: uliza_expert_id}), function(response) {
+    $.post('/answer?' + $.param({answer_text:questionAsked, uliza_expert_id: uliza_expert_id, question_id: $('.answer').attr('id')}), function(response) {
       console.log(response);
         $.get('/unanswered', function(questions) {
           questions.forEach(function(question) {
