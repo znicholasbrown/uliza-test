@@ -2,13 +2,18 @@
 // run by the browser each time your view template is loaded
 
 $(function() {
-  $.get('/tests', function(questions) {
+  $.get('/questions', function(questions) {
     console.log(questions);
     questions.forEach(function(question) {
-      $('<li></li>').text(question[0] + " " + question[1]).appendTo('ul#users');
+      $('<div></div>').text(question[0]).attr('id', question[2]).append($('<button>View Answer</button>').click(handleClick)).appendTo('div#questions');
     });
   });
-
+  
+  function handleClick (e) {
+    $.get('/answer?q=' + e.target.parentNode.id, function () {
+      $('div#' + e.target.parentNode.id).append(
+    })
+  }
   $('form').submit(function(event) {
     event.preventDefault();
     var questionAsked = $('input#askQuestion').val();

@@ -73,14 +73,14 @@ sequelize.authenticate()
 
 // populate table with default questions and answers
 function setup(){
-  Question.sync({force: false}) // We use 'force: true' in this example to drop the table questions if it already exists, and create a new one. You'll most likely want to remove this setting in your own apps
+  Question.sync({force: true}) // We use 'force: true' in this example to drop the table questions if it already exists, and create a new one. You'll most likely want to remove this setting in your own apps
     .then(function(){
       // Add the default questions to the database
       for(var i=0; i<questions.length; i++){ // loop through all questions
         Question.create({ question_text: questions[i][0], enquirer_id: questions[i][1], question_id: questions[i][2]}); // create a new entry in the questions table
       }
     });  
-  Answer.sync({force: false})
+  Answer.sync({force: true})
     .then(function(){
       // Add the default answers to the database
       for(var i=0; i<answers.length; i++){ // loop through all answers
@@ -93,18 +93,7 @@ function setup(){
 app.use(express.static('public'));
 
 app.get("/", function (request, response) {
-  response.sendFile(__dirname + '/views/notIndex.html');
-});
-
-app.get("/tests", function (request, response) {
-  var dbQuestions=[];
-  Question.findAll().then(function(questions) { // find all entries in the questions tables
-    questions.forEach(function(question) {
-      dbQuestions.push([question.question_text, question.enquirer_id, question.question_id]); // adds their info to the dbQuestions value
-    });
-    response.send(dbQuestions); // sends dbQuestions back to the page
-  });
-
+  response.sendFile(__dirname + '/views/index.html');
 });
 
 
