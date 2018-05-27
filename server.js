@@ -92,7 +92,21 @@ function setup(){
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
 
-// http://expressjs.com/en/starter/basic-routing.html
+app.get("/", function (request, response) {
+  response.sendFile(__dirname + '/views/notIndex.html');
+});
+
+app.get("/tests", function (request, response) {
+  var dbQuestions=[];
+  Question.findAll().then(function(questions) { // find all entries in the questions tables
+    questions.forEach(function(question) {
+      dbQuestions.push([question.question_text, question.enquirer_id, question.question_id]); // adds their info to the dbQuestions value
+    });
+    response.send(dbQuestions); // sends dbQuestions back to the page
+  });
+
+});
+
 
 
 app.get("/questions", function (request, response) {
@@ -122,10 +136,6 @@ app.get("/answer", function (request, response) {
     qAnswer = answer;
     response.send(qAnswer);
   });
-});
-
-app.get("/", function (request, response) {
-  response.sendFile(__dirname + '/views/notIndex.html');
 });
 
 // listen for requests :)

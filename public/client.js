@@ -2,7 +2,7 @@
 // run by the browser each time your view template is loaded
 
 $(function() {
-  $.get('/questions', function(questions) {
+  $.get('/tests', function(questions) {
     console.log(questions);
     questions.forEach(function(question) {
       $('<li></li>').text(question[0] + " " + question[1]).appendTo('ul#users');
