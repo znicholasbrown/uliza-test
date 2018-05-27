@@ -17,8 +17,8 @@ const answers = [
       ["Make 3 lefts, a bizarre series of rights, and then go straight for 6 light years.", "Q3", "U123ABC"]
     ];
 
-let Question;
-let Answer;
+var Question;
+var Answer;
 
 // setup a new database
 // using database credentials set in .env
@@ -73,14 +73,14 @@ sequelize.authenticate()
 
 // populate table with default questions and answers
 function setup(){
-  Question.sync({force: false}) // We use 'force: true' in this example to drop the table users if it already exists, and create a new one. You'll most likely want to remove this setting in your own apps
+  Question.sync({force: true}) // We use 'force: true' in this example to drop the table users if it already exists, and create a new one. You'll most likely want to remove this setting in your own apps
     .then(function(){
       // Add the default questions to the database
       for(var i=0; i<questions.length; i++){ // loop through all users
         Question.create({ question_text: questions[i][0], enquirer_id: questions[i][1], question_id: questions[i][2]}); // create a new entry in the users table
       }
     });  
-  Answer.sync({force: false}) // We use 'force: true' in this example to drop the table users if it already exists, and create a new one. You'll most likely want to remove this setting in your own apps
+  Answer.sync({force: true})
     .then(function(){
       // Add the default answers to the database
       for(var i=0; i<answers.length; i++){ // loop through all users
@@ -98,13 +98,15 @@ app.get("/", function (request, response) {
 });
 
 app.get("/questions", function (request, response) {
+  response.sendStatus(200);)
   var dbQuestions=[];
   Question.findAll().then(function(questions) { // find all entries in the questions tables
     questions.forEach(function(question) {
-      dbQuestions.push([question.question_text,question.enquirer_id, question.question_id]); // adds their info to the dbUsers value
+      dbQuestions.push([question.question_text, question.enquirer_id, question.question_id]); // adds their info to the dbUsers value
     });
     response.send(dbQuestions); // sends dbQuestions back to the page
   });
+
 });
 
 // creates a new entry in the questions table

@@ -3,6 +3,7 @@
 
 $(function() {
   $.get('/questions', function(questions) {
+    console.log(questions);
     questions.forEach(function(question) {
       $('<li></li>').text(question[0] + " " + question[1]).appendTo('ul#users');
     });
