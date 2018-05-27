@@ -25,7 +25,7 @@ $(function() {
   
   $('form').submit(function(event) {
     event.preventDefault();
-    var questionAsked = $('input#askQuestion').val();
+    var questionAsked = $('input#answerQuestion').val();
     $.post('/answer?' + $.param({answer_text:questionAsked, uliza_expert_id: uliza_expert_id, question_id: $('.answer').attr('id')}), function(response) {
       getUnsanswered();
       $('input#questionAnswered').val('');

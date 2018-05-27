@@ -81,3 +81,13 @@ footer > a {
 .answer {
   display: none;
 }
+
+.question {
+  margin: 20px;
+
+}
+
+.question_answered {
+  color: aqua;
+  background-color: black;
+}
