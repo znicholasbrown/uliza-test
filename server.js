@@ -1,6 +1,7 @@
 // init project
 var express = require('express');
 var Sequelize = require('sequelize');
+var uniqid = require('uniqid');
 const app = express();
 
 // default questions list
@@ -93,9 +94,12 @@ function setup(){
 app.use(express.static('public'));
 
 app.get("/", function (request, response) {
-  response.sendFile(__dirname + '/views/index.html');
+  response.sendFile(__dirname + '/views/askerIndex.html');
 });
 
+app.get("/experts", function (request, response) {
+  response.sendFile(__dirname + '/views/expertIndex.html');
+});
 
 
 app.get("/questions", function (request, response) {
@@ -111,9 +115,9 @@ app.get("/questions", function (request, response) {
 
 // creates a new entry in the questions table
 app.post("/questions", function (request, response) {
-  let randomID = '';
-  Question.create({ question_text: request.query.question_text, enquirer_id: request.query.enquirer_id, question_id: request.query.enquirer_id });
-  response.send({ question_text: request.query.question_text, enquirer_id: request.query.enquirer_id, question_id: request.query.enquirer_id });
+  let randomID = 'Q' + uniqid();
+  Question.create({ question_text: request.query.question_text, enquirer_id: request.query.enquirer_id, question_id: randomID });
+  response.send({ question_text: request.query.question_text, enquirer_id: request.query.enquirer_id, question_id: randomID });
 });
 
 app.get("/answer", function (request, response) {

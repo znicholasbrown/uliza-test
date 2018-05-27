@@ -1,11 +1,11 @@
-// client-side js
+// client-side expert js
 // run by the browser each time your view template is loaded
 
 $(function() {
   // These would be provided by the server.
-  const enquirer_id = 'E123ABC'; 
+  const uliza_expert_id = 'U123ABC';
   
-  $.get('/questions', function(questions) {
+  $.get('/unanswered', function(questions) {
     console.log(questions);
     questions.forEach(function(question) {
       $('<div></div>').text(question[0]).attr('id', question[2]).append($('<button>View Answer</button>').click(viewAnswer)).appendTo('div#questions');

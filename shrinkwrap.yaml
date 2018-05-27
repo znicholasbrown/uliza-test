@@ -2,6 +2,7 @@ dependencies:
   express: 4.16.3
   sequelize: 4.37.5
   sqlite3: 4.0.0
+  uniqid: 4.1.1
 packages:
   /@types/geojson/1.0.6:
     dev: false
@@ -244,6 +245,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-svL3uiZf1RwhH+cWrfZn3A4+U58wbP0tGVTLQPbjplZxZ8ROD9VLuNgsRniTlLe7OlSqR79RUehXgpBW/s0IQw==
+  /macaddress/0.2.8:
+    dev: false
+    resolution:
+      integrity: sha1-WQTcU3w57G2+/q6QIycTX6hRHxI=
   /media-typer/0.3.0:
     dev: false
     engines:
@@ -482,6 +487,12 @@ packages:
       node: '>= 0.6'
     resolution:
       integrity: sha512-HRkVv/5qY2G6I8iab9cI7v1bOIdhm94dVjQCPFElW9W+3GeDOSHmy2EBYe4VTApuzolPcmgFTN3ftVJRKR2J9Q==
+  /uniqid/4.1.1:
+    dependencies:
+      macaddress: 0.2.8
+    dev: false
+    resolution:
+      integrity: sha1-iSIN32t1GuUrX3JISGNShZa7hME=
   /unpipe/1.0.0:
     dev: false
     engines:
@@ -523,3 +534,4 @@ specifiers:
   express: ^4.12.4
   sequelize: '*'
   sqlite3: '*'
+  uniqid: '*'

@@ -9,7 +9,8 @@
 	"dependencies": {
     "express": "^4.12.4",
     "sqlite3": "*",
-    "sequelize": "*"
+    "sequelize": "*",
+    "uniqid": "*"
 	},
 	"keywords": [
 		"node",
