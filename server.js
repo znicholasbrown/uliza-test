@@ -18,7 +18,7 @@ const answers = [
     ];
 
 let Question;
-let Answers;
+let Answer;
 
 // setup a new database
 // using database credentials set in .env
@@ -52,7 +52,7 @@ sequelize.authenticate()
       }
     });
     // define a new table 'answers'
-    Answers = sequelize.define('answers', {
+    Answer = sequelize.define('answers', {
         answer_text: {
           type: Sequelize.STRING
         },
@@ -71,7 +71,7 @@ sequelize.authenticate()
     console.log('Unable to connect to the database: ', err);
   });
 
-// populate table with default users
+// populate table with default questions and answers
 function setup(){
   Question.sync({force: false}) // We use 'force: true' in this example to drop the table users if it already exists, and create a new one. You'll most likely want to remove this setting in your own apps
     .then(function(){
@@ -80,11 +80,11 @@ function setup(){
         Question.create({ question_text: questions[i][0], enquirer_id: questions[i][1], question_id: questions[i][2]}); // create a new entry in the users table
       }
     });  
-  Answers.sync({force: false}) // We use 'force: true' in this example to drop the table users if it already exists, and create a new one. You'll most likely want to remove this setting in your own apps
+  Answer.sync({force: false}) // We use 'force: true' in this example to drop the table users if it already exists, and create a new one. You'll most likely want to remove this setting in your own apps
     .then(function(){
       // Add the default answers to the database
-      for(var i=0; i<questions.length; i++){ // loop through all users
-        Answers.create({ question_text: questions[i][0], enquirer_id: questions[i][1], question_id: questions[i][2]}); // create a new entry in the users table
+      for(var i=0; i<answers.length; i++){ // loop through all users
+        Answer.create({ answer_text: answers[i][0], question_id: answers[i][1], uliza_expert_id: answers[i][2]}); // create a new entry in the users table
       }
     });  
 }
@@ -97,21 +97,34 @@ app.get("/", function (request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
 
-app.get("/users", function (request, response) {
-  var dbUsers=[];
-  User.findAll().then(function(users) { // find all entries in the users tables
-    users.forEach(function(user) {
-      dbUsers.push([user.firstName,user.lastName]); // adds their info to the dbUsers value
+app.get("/questions", function (request, response) {
+  var dbQuestions=[];
+  Question.findAll().then(function(questions) { // find all entries in the questions tables
+    questions.forEach(function(question) {
+      dbQuestions.push([question.question_text,question.enquirer_id, question.question_id]); // adds their info to the dbUsers value
     });
-    response.send(dbUsers); // sends dbUsers back to the page
+    response.send(dbQuestions); // sends dbQuestions back to the page
   });
 });
 
-// creates a new entry in the users table with the submitted values
-app.post("/users", function (request, response) {
-  User.create({ firstName: request.query.fName, lastName: request.query.lName});
+// creates a new entry in the questions table
+app.post("/questions", function (request, response) {
+  Question.create({ question_text: request.query.question_text, enquirer_id: request.query.enquirer_id, question_id: request.query.enquirer_id });
   response.sendStatus(200);
 });
+
+app.get("/answer", function (request, response) {
+  var qAnswer;
+  Answer.findAll({
+    where: {
+      question_id: request.question_id
+    }
+  }).then(function (answer) {
+    qAnswer = answer;
+    response.send(qAnswer);
+  });
+})
+  
 
 // drops the table users if it already exists, populates new users table it with just the default users.
 app.get("/reset", function (request, response) {
@@ -119,11 +132,6 @@ app.get("/reset", function (request, response) {
   response.redirect("/");
 });
 
-// removes all entries from the users table
-app.get("/clear", function (request, response) {
-  User.destroy({where: {}});
-  response.redirect("/");
-});
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
