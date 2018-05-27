@@ -4,6 +4,16 @@ var Sequelize = require('sequelize');
 var uniqid = require('uniqid');
 const app = express();
 
+var nodemailer = require('nodemailer');
+
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'youremail@gmail.com',
+    pass: 'yourpassword'
+  }
+});
+
 // default questions list
 var questions = [
       ["How could you survive in the wilderness for a month?", "E123ABC", "Q1", true],
@@ -11,7 +21,7 @@ var questions = [
       ["How do I get to Aba from Lagos?", "E123ABC", "Q3", true],
       ["How many people can a moon made of cheese feed?", "E456ABC", "Q4", false],
       ["Why do my feet look like a troll\'s feet?", "E457ABC", "Q5", false],
-      ["Who killed JFK?", "E456ABC", "Q4", false],
+      ["Who killed JFK?", "E456ABC", "Q12", false],
       ["Does Darth Vader have asthma?", "E458ABC", "Q6", false],
       ["I saw 10 movies in one week once", "E459ABC", "Q7", false],
       ["Is yogurt gurt from a yo or yo from a gurt?", "E460ABC", "Q8", false],
@@ -163,6 +173,22 @@ app.post("/answer", function (request, response) {
         answered: true
       })
       Answer.create({ answer_text: request.query.answer_text, question_id: request.query.question_id, uliza_expert_id: request.query.uliza_expert_id, answer_id: randomID });
+      
+      let mailOptions = {
+        from: 'youremail@gmail.com',
+        to: 'useremail@email.com',
+        subject: 'Your question has been answered!',
+        text: '<a href="https://abrupt-visage.glitch.me/" target="_blank">View your questions</a>'
+      };
+      
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+      
       response.sendStatus(200)
     }
   })
