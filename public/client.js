@@ -14,6 +14,7 @@ $(function() {
   function viewAnswer (e) {
     var question_id = e.target.parentNode.id;
     $.get('/answer?' + $.param({question_id: question_id}), function (response) {
+      $('#' + question_id).remove();
       if (response.length > 0) {
         $('<div></div>').text(response[0].answer_text).appendTo('div#' + e.target.parentNode.id)
       } else {
