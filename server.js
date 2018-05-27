@@ -1,22 +1,28 @@
-// server.js
-// where your node app starts
-
 // init project
-var express = require('express');
-var Sequelize = require('sequelize');
-var app = express();
+const express = require('express');
+const Sequelize = require('sequelize');
+const app = express();
 
-// default user list
-var questions = [
-      ["How could you survive in the wilderness for a month?"],
-      ["Is there such a thing as universal time?"],
-      ["How do I get to Aba from Lagos?"]
+// default questions list
+const questions = [
+      ["How could you survive in the wilderness for a month?", "E123ABC", "Q1"],
+      ["Is there such a thing as universal time?", "E456ABC", "Q2"],
+      ["How do I get to Aba from Lagos?", "E123ABC", "Q3"],
+      ["How many people can a moon made of cheese feed?", "E456ABC", "Q4"]
     ];
-var Question;
+
+const answers = [
+      ["I couldn't.", "Q1", "U123ABC"],
+      ["Yes, but we'll never use it.", "Q2", "U456ABC"],
+      ["Make 3 lefts, a bizarre series of rights, and then go straight for 6 light years.", "Q3", "U123ABC"]
+    ];
+
+let Question;
+let Answers;
 
 // setup a new database
 // using database credentials set in .env
-var sequelize = new Sequelize('database', process.env.DB_USER, process.env.DB_PASS, {
+const sequelize = new Sequelize('database', process.env.DB_USER, process.env.DB_PASS, {
   host: '0.0.0.0',
   dialect: 'sqlite',
   pool: {
@@ -33,17 +39,32 @@ var sequelize = new Sequelize('database', process.env.DB_USER, process.env.DB_PA
 sequelize.authenticate()
   .then(function(err) {
     console.log('Connection has been established successfully.');
-    // define a new table 'users'
+    // define a new table 'questions'
     Question = sequelize.define('questions', {
       question_text: {
         type: Sequelize.STRING
       },
       enquirer_id: {
         type: Sequelize.STRING
+      },
+      question_id: {
+          type: Sequelize.STRING
       }
     });
+    // define a new table 'answers'
+    Answers = sequelize.define('answers', {
+        answer_text: {
+          type: Sequelize.STRING
+        },
+        question_id: {
+          type: Sequelize.STRING
+        },
+        uliza_expert_id: {
+            type: Sequelize.STRING
+        }
+      });
     // relevant: uliza_expert_id, enquirer_id, question_id,
-// question_text, answer_id, answer_text
+    // question_text, answer_id, answer_text
     setup();
   })
   .catch(function (err) {
@@ -52,11 +73,18 @@ sequelize.authenticate()
 
 // populate table with default users
 function setup(){
-  User.sync({force: true}) // We use 'force: true' in this example to drop the table users if it already exists, and create a new one. You'll most likely want to remove this setting in your own apps
+  Question.sync({force: false}) // We use 'force: true' in this example to drop the table users if it already exists, and create a new one. You'll most likely want to remove this setting in your own apps
     .then(function(){
-      // Add the default users to the database
-      for(var i=0; i<users.length; i++){ // loop through all users
-        User.create({ firstName: users[i][0], lastName: users[i][1]}); // create a new entry in the users table
+      // Add the default questions to the database
+      for(var i=0; i<questions.length; i++){ // loop through all users
+        Question.create({ question_text: questions[i][0], enquirer_id: questions[i][1], question_id: questions[i][2]}); // create a new entry in the users table
+      }
+    });  
+  Answers.sync({force: false}) // We use 'force: true' in this example to drop the table users if it already exists, and create a new one. You'll most likely want to remove this setting in your own apps
+    .then(function(){
+      // Add the default answers to the database
+      for(var i=0; i<questions.length; i++){ // loop through all users
+        Answers.create({ question_text: questions[i][0], enquirer_id: questions[i][1], question_id: questions[i][2]}); // create a new entry in the users table
       }
     });  
 }
