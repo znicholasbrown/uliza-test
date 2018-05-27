@@ -6,16 +6,16 @@ const app = express();
 
 // default questions list
 var questions = [
-      ["How could you survive in the wilderness for a month?", "E123ABC", "Q1"],
-      ["Is there such a thing as universal time?", "E456ABC", "Q2"],
-      ["How do I get to Aba from Lagos?", "E123ABC", "Q3"],
-      ["How many people can a moon made of cheese feed?", "E456ABC", "Q4"]
+      ["How could you survive in the wilderness for a month?", "E123ABC", "Q1", true],
+      ["Is there such a thing as universal time?", "E456ABC", "Q2", true],
+      ["How do I get to Aba from Lagos?", "E123ABC", "Q3", true],
+      ["How many people can a moon made of cheese feed?", "E456ABC", "Q4", false]
     ];
 
 var answers = [
-      ["I couldn\'t.", "Q1", "U123ABC"],
-      ["Yes, but we'll never use it.", "Q2", "U456ABC"],
-      ["Make 3 lefts, a bizarre series of rights, and then go straight for 6 light years.", "Q3", "U123ABC"]
+      ["I couldn\'t.", "Q1", "U123ABC", "A123ABC"],
+      ["Yes, but we'll never use it.", "Q2", "U456ABC", "A124ABC"],
+      ["Make 3 lefts, a bizarre series of rights, and then go straight for 6 light years.", "Q3", "U123ABC", "A125ABC"]
     ];
 
 var Question;
@@ -49,7 +49,10 @@ sequelize.authenticate()
         type: Sequelize.STRING
       },
       question_id: {
-          type: Sequelize.STRING
+        type: Sequelize.STRING
+      },
+      answered: {
+        type: Sequelize.BOOLEAN
       }
     });
     // define a new table 'answers'
@@ -61,7 +64,10 @@ sequelize.authenticate()
           type: Sequelize.STRING
         },
         uliza_expert_id: {
-            type: Sequelize.STRING
+          type: Sequelize.STRING
+        },
+        answer_id: {
+          type: Sequelize.STRING
         }
       });
     // relevant: uliza_expert_id, enquirer_id, question_id,
@@ -78,14 +84,14 @@ function setup(){
     .then(function(){
       // Add the default questions to the database
       for(var i=0; i<questions.length; i++){ // loop through all questions
-        Question.create({ question_text: questions[i][0], enquirer_id: questions[i][1], question_id: questions[i][2]}); // create a new entry in the questions table
+        Question.create({ question_text: questions[i][0], enquirer_id: questions[i][1], question_id: questions[i][2], answered: questions[i][3] }); // create a new entry in the questions table
       }
     });  
   Answer.sync({force: true})
     .then(function(){
       // Add the default answers to the database
       for(var i=0; i<answers.length; i++){ // loop through all answers
-        Answer.create({ answer_text: answers[i][0], question_id: answers[i][1], uliza_expert_id: answers[i][2]}); // create a new entry in the answers table
+        Answer.create({ answer_text: answers[i][0], question_id: answers[i][1], uliza_expert_id: answers[i][2], answer_id: answers[i][3] }); // create a new entry in the answers table
       }
     });  
 }
@@ -106,6 +112,21 @@ app.get("/questions", function (request, response) {
   var dbQuestions=[];
   Question.findAll().then(function(questions) { // find all entries in the questions tables
     questions.forEach(function(question) {
+      dbQuestions.push([question.question_text, question.enquirer_id, question.question_id, question.answered]); // adds their info to the dbQuestions value
+    });
+    response.send(dbQuestions); // sends dbQuestions back to the page
+  });
+
+});
+
+app.get("/unanswered", function (request, response) {
+  var dbQuestions=[];
+  Question.findAll({
+    where: {
+      answered: false
+    }
+  }).then(function(questions) { // find all entries in the questions tables
+    questions.forEach(function(question) {
       dbQuestions.push([question.question_text, question.enquirer_id, question.question_id]); // adds their info to the dbQuestions value
     });
     response.send(dbQuestions); // sends dbQuestions back to the page
@@ -116,8 +137,18 @@ app.get("/questions", function (request, response) {
 // creates a new entry in the questions table
 app.post("/questions", function (request, response) {
   let randomID = 'Q' + uniqid();
-  Question.create({ question_text: request.query.question_text, enquirer_id: request.query.enquirer_id, question_id: randomID });
-  response.send({ question_text: request.query.question_text, enquirer_id: request.query.enquirer_id, question_id: randomID });
+  Question.create({ question_text: request.query.question_text, enquirer_id: request.query.enquirer_id, question_id: randomID, answered: false });
+  response.send({ question_text: request.query.question_text, enquirer_id: request.query.enquirer_id, question_id: randomID, answered: false });
+});
+
+app.post("/answer", function (request, response) {
+  let randomID = 'A' + uniqid();
+  Answer.create({ question_text: request.query.question_text, enquirer_id: request.query.enquirer_id, question_id: randomID, answered: false });
+  Answer.create({ answer_text: request.query.answer_text, question_id: request.query.question_id, uliza_expert_id: request.query.uliza_expert_id, answer_id: answers[i][3] });
+  response.send({ question_text: request.query.question_text, enquirer_id: request.query.enquirer_id, question_id: randomID, answered: false });
+  
+      // relevant: uliza_expert_id, enquirer_id, question_id,
+    // question_text, answer_id, answer_text
 });
 
 app.get("/answer", function (request, response) {

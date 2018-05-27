@@ -6,7 +6,6 @@ $(function() {
   const enquirer_id = 'E123ABC'; 
   
   $.get('/questions', function(questions) {
-    console.log(questions);
     questions.forEach(function(question) {
       $('<div></div>').text(question[0]).attr('id', question[2]).append($('<button>View Answer</button>').click(viewAnswer)).appendTo('div#questions');
     });
